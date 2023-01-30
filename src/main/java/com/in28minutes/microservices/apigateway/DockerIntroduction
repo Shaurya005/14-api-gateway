@@ -1,0 +1,93 @@
+During this course, we have talked about the fact that enterprises are heading towards microservices architectures.
+You're building a number of small microservices that communicate with each other, and help you to achieve your required functionality.
+
+As part of our microservices architectures, we build a number of small focused microservices. One of the biggest advantages of microservices is the flexibility to innovate
+and build applications in different programming languages. You can build microservices using Java and Spring Boot, as we are doing in this specific course.
+You can also build microservices using Go, Python, JavaScript, and a variety of other programming languages.
+
+But as we start exploring the microservices architecture and start implementing different languages, the deployments of these microservices become complex.
+Let's say the Movie microservice and the Customer microservice are implemented in Java, and let's say the other ones are implemented in Python.
+You do not want different deployment procedures for each of these microservice types.
+How can you get a common way to deploy multiple microservices irrespective of the language or the framework that is used to build these microservices?
+How can we get one way of deploying Go, Java, Python, or JavaScript microservices? That's where containers come into picture, and the most popular container tool is Docker.
+
+What you can do is to create Docker images for each of these microservices. So for all the microservices that we looked over here, you can create Docker images.
+The Docker image contains everything that a microservice needs to run. The Application Runtime (JDK or Python or NodeJS), The application code (For Java applications it
+might just be the JAR), your dependencies that you need to run the application.
+
+So, everything is part of your Docker image, and once you have this Docker image, you can run these as docker containers the same way on any infrastructure.
+So you can run these Docker images on your local machine, in a corporate data center, and also in the Cloud, whether it's AWS, Azure, or Google Cloud.
+All of these support running docker containers in a wide variety of ways. We think containers are one of the most important evolutions as far as microservices
+architectures are concerned in the last decade. Next, let's get started with Docker before getting back on track with microservices.
+
+
+
+In this step, let's discuss a use case where Docker is most useful. You are working on a team on a challenging project with very tight deadlines.
+You'd want a application deployed to an environment quickly.
+
+You go to a very good friend of yours working in the operations team and tell, "Okay let's quickly deploy the application to the QA environment."
+And you tell him to launch up terminal and type this to check if Docker is installed - docker--version. Okay, Docker is installed.
+
+Now, let's run the application i.e. deploy the application by running this command in terminal - docker run in28min/todo-rest-api-h2:1.0.0.RELEASE
+Let's see what would happen - and you'd see that right now it's downloading something, it's pulling something, it's "Downloaded a new image," it says.
+
+And now a Spring Boot application is being launched up and in about 20 seconds, we are able to launch up a Spring Boot application.
+Your friend tells you, "On this machine, Java is not installed. How's it running?" He's used to the manual approach. He usually gets a document that says -
+
+"Okay, you need this hardware and you'd want to install Linux XYZ version, and on top of it, install Java 8.5.10, install Tomcat a.a.b and then download this JAR
+and then run it using this command."
+
+And what he tries to do typically is try to follow these instructions and install the application. And typically he makes a lot of mistakes.
+When we look at a document and try to type it down a multiple set of instructions, there's a high chance that I make a mistake while deploying something.
+He's asking you now, "How are we able to deploy this application that you have built so easily?" You tell your friend, "Okay, that's the magic of Docker."
+Let's look at what's happening behind the screens in the subsequent steps.
+
+
+
+In the previous step, we were able to quickly launch up an application just running a simple instruction. But where is this application downloaded from?
+You have typed in something there - docker run in28min/todo-rest-api-h2:1.0.0.RELEASE. What is this and where is this coming in from?
+
+Over there when we run that command what is happening is an image is downloaded from something called hub.docker.com. hub.docker.com is something called a docker registry.
+A registry contains a lot of repositories a lot of different versions of different applications. And because this is a public registry, anybody can access this.
+
+Typically when you're working in an enterprise, we would be using private repositories so that our images can only be accessed by somebody who has the right credentials.
+If this is the registry where our application is, how do we locate our application ?
+
+So on hub.docker.com, you can add /r and in28min/todo-rest-api-h2, which we've used in previous terminal command.
+If you go to that url now i.e. to hub.docker.com/r/in28min/todo-rest-api-h2, you would go to something called a repository.
+
+So hub.docker.dot com is a registry. It can contain multiple repositories and inside that in28min/todo-rest-api-h2 is a depository storing all the versions of a specific application.
+So this is something that hosts a number of tags and we specified 1.0.0.RELEASE as the version that we would want to use.
+
+Now what does this image contain? You'd see that this image is about 102 mb. This image actually contains all the things that your application needs to run.
+It contains the right software. For example, Java, a specific version of Java Java 8 or Java 11, whichever version you'd want to use.
+It contains all the libraries your API needs. Your todo-rest API might need 15 libraries. It contains all of them and it contains any other dependency
+that your application might need to be able to run.
+
+When we ran above command in terminal, this image was downloaded to our machine, so a local image was created. So from the registry, the image is downloaded to our machine
+and once the image is downloaded, it is ran as an application in your machine. And this is what is called a container. Image is something static.
+
+So on the repository image is a set of bytes, that's it. When it's downloaded even then the image is just a set of bytes. And when it's running it's called a container.
+So image is a static version and container is a running version. And for the same image you can have multiple containers running.
+
+Now you might be wondering that the Spring boot application is running but we would want to be able to access it. How can we do that?
+If you go further down in Spring application logs in terminal, you'd see that it's running on port 5000.
+Let's go and try to run it. Actually the URL for this is localhost:5000/hello-world. If we just try to go to that URL, you'd see error.
+
+Press Ctrl + C to terminate the running container and let's do a clear try to run above command again.
+However, this time with option i.e. we need to put an option called 5000:5000 like this - docker run -p 5000:5000 in28min/todo-rest-api-h2:1.0.0.RELEASE
+
+We need this because what happens is by default any container that you run is part of something called a bridge network in Docker. Think of it like an internal docker network.
+Nobody will be able to access it unless you specifically expose it onto the host, onto the system where your container is running. So above we are saying that
+I want to take the internal port i.e. the container port 5000 and map it to a host port i.e. to the port on the system where the container is running which is 5000.
+So now we would be able to access the application on Port 5000.
+
+Application is launched after about 20 seconds and now you'd see that I'm able to access the URL - localhost:5000/hello-world
+If you would also add in -bean to the url i.e. url now be like - localhost:5000/hello-world-bean, you'd see that there are a couple of other APIs which are exposed there.
+In this step, we got a quick overview of a few concepts related to Docker.
+
+Let's do a quick review of what we have discussed until now. When we execute the command, the image is downloaded from something called docker hub.
+Docker hub is something called a docker registry. A registry contains a number of repositories. When we are specifying the name there in command, it's actually name of
+one of the repositories and we are specifying which version, which tag of that repository to get. And once we specify that, we saw that the image was downloaded and running.
+The running version of the image is called a container. A image is a static version and the running dynamic version of it is called a container.
+And at the end we also saw that we had to publish the container port to a host port to be able to access the application.

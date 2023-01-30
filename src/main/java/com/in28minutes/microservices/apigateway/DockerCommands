@@ -1,0 +1,51 @@
+In this step let's play around a little bit more with docker images and docker containers. I'll stop the running application by Ctrl + C and try to run the application
+on URL - localhost:5000/hello-world but it's down. Now, you'd want your application to be always running. You don't want it to be killed when you do Ctrl + C.
+We can do that by running the command which we ran earlier adding an option called -d like - docker run -p 5000:5000 -d in28min/todo-rest-api-h2:1.0.0.RELEASE
+
+So -d stands for detached mode. So what we want to do is we would want to run the container in the background.
+We don't want to tie up the terminal to the life cycle of the container. So you would want to detach it from that.
+
+You'd only get a container ID in terminal instead of complete Spring application log which we used to get before and that's it. You don't see any of the logs.
+If you want to see the logs, you can run - docker logs <ID of the container>. You can also type in a subset of the id. You can also say C9B5 instead of the entire id.
+So if I do docker logs you can see the some of the logs from that specific application.
+
+If you'd want to keep following the logs, then you can do that by saying another option -f like - docker logs -f C9B5
+This would start tailing the logs. It would start following the logs of that specific application. So if there is any new log coming in, I would be able to see it.
+
+Actually, none of the basic URLs are actually generating any of the logs. So I'll type in a complex URL which is exposed by this - localhost:5000/jpa/users/in28minutes/todos.
+This would not really return any data but it would actually execute a query and you'd be able to see the query in the logs of terminal if you're tailing the logs.
+
+Press Ctrl + C to stop tailing the logs.
+docker container ls - To see what are the containers which are running.
+
+You can see that a particular container is running for about 3 minutes. You can see that a name was also assigned to that specific container. It's called blissful_wing,
+don't ask me how the name was generated and it's also assigned a id. Actually, this shows only the first few letters of the id.
+Earlier when we ran the container we were able to see the big string, that's actually the complete id.
+
+Now what I want to launch up another container from the same image. Earlier I said we can run multiple containers from the same image.
+What I can do is now I can run another version of the same application on port 5001 by running command - docker run -p 5001:5000 -d in28min/todo-rest-api-h2:1.0.0.RELEASE
+We are running it in detached mode. So if I do - docker logs -f 38155 which is like the first five digits from Container Id which we get on running above command in terminal.
+You can follow the logs. We are now tailing the logs which are generating from the second container which we are launching up. Cool. The Tomcat has started on port 5,000 it says.
+
+Now we access it using port 5001 via URL - localhost:5001/hello-world. So now we have two instances of the application running one on 5000, the other one on 5001.
+Now if I disconnect from the logs So we just ran the command docker logs -f and we disconnected from it and now run - docker container ls
+It shows that there are two containers running and these two containers are created from the same image.
+
+docker images - To see all the images which are present in my machine,
+
+It shows that we have one image. Thing is the docker images only shows the images that are local to us.
+The images which have been pulled from the docker registry. It's not completely showing all the images which are present inside the docker registry i.e. inside the docker hub.
+If you want to see any image down here, the first thing you need to do is to pull the image down and once you pull the image down, you'd see that image when you run docker images.
+
+docker container ls - list all the running containers.
+
+If we add an option -a i.e. docker container ls -a then you can see that this shows all the containers, irrespective of their status.
+You can see that these two containers are running, up 3 minutes, up 7 minutes. However, these two containers have exited 8 minutes ago, exited 24 minutes ago.
+
+So docker container ls -a shows the running containers and the stopped containers. Now, let's stop the containers which are running.
+
+docker container stop <container-id> - To stop the containers which are running.
+So I'll run - docker container stop 38155 (first five digits of container Id). Similarly stop other ones which are running..
+
+Something unique at this start to identify the container is more than sufficient. You don't really need to enter the entire id of the container.
+And now you'd see that none of the URLs would be working. And when I do a docker container ls -a, you'd see that everything is now in exited status.

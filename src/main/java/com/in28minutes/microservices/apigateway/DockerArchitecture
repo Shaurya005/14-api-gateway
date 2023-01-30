@@ -1,0 +1,58 @@
+In this step let's understand the architecture of Docker. The place we were running the commands in is called a Docker client and when we type something in the
+Docker client, the command is sent out to something called a Docker Daemon or a Docker engine for execution. So even the local installation of Docker uses a client
+server kind of architecture. So when you install Docker desktop, we were installing both the Docker client and the Docker Daemon.
+
+The Docker Daemon is responsible for managing the containers. It's responsible for managing the locally images and it is responsible for pulling something from the image
+registry if you need it or pushing a locally created image to a image registry. The first two parts of that is very easy, right?
+
+Docker Daemon is responsible for containers and local images. Earlier, we created a number of containers and if I do a docker container ls -a
+you'd see all the images that we have created and stopped.
+
+All these containers were created and stopped. All these containers were managed by the Docker Daemon or the Docker engine, which is running on our local machine.
+The Docker Daemon also manages the images which were downloaded. The Docker Daemon knows that there is a local image for this specific repository and this specific tag.
+
+Now, if I would want to run a container based on the same image, let's see what would happen.
+So I'm removing the -d because I would want to see the logs right here and let's continue to run it on 5000. So it's like - docker run -p 5000:5000 in28min/todo-rest-api-h2:1.0.0.RELEASE
+So I'm using the same image name and the same tag, 1.0.0.RELEASE. You'd see that it's not really downloading the image again as it knows what containers and images are
+present in local and it knows that this specific thing is already available and it runs an existing thing.
+
+Now, I'll stop that, Ctrl+C, and now I'll use a different tag of this i.e. instead of 1.0.0.RELEASE, I would use a different tag - 0.0.1-SNAPSHOT.
+So I'm running this - docker run -p 5000:5000 in28min/todo-rest-api-h2:0.0.1-SNAPSHOT
+
+We are running the command in Docker client. The Docker client sends it to the Docker Daemon and the Docker Daemon now sees that image is not available locally.
+It says in the in28min/todo-rest-api-h2 repository with tag 0.0.1-SNAPSHOT, the image is not available locally.
+
+So it's going to the registry and fetching that image down for us. So it'll fetch down the image and then run it as a container. So it downloaded a new image for us.
+So the Docker Daemon is responsible for managing our local stuff and also pulling something from the image repository if something is not available on our local.
+
+One of the additional capabilities that Docker Daemon has is it can process instructions to create images as well. Until now, we have been using images which are
+already created but later in the course we'll be creating more than 10 different images for different kinds of applications for Rest api, full stack applications and microservices.
+At that time, you would see that the Docker Daemon would help us in creating those images and also pushing the images to the image registry so that somebody else can make use of them.
+
+In this quick step, we understood the different components which are installed when we installed Docker desktop on our machine and we also understood the responsibilities
+of each of those components. We talked about Docker client, which is responsible for just sending the commands to the Docker Daemon.
+We talked about the fact that the Docker Daemon is responsible for managing our local containers, local images. It's responsible for pulling images from the image registry.
+It's responsible for creating images and also pushing out images to the image registry.
+
+
+
+You should understand the big picture around why Docker is becoming famous. One of the things we saw was installing Docker on our local machine was very easy, so developers
+can use Docker easily. Now, most of our environments are deployed on cloud these days. The awesome thing about Docker is you can install Docker on cloud also very easily.
+
+Most of the cloud providers actually provide container based services. So they provide services where you just need to tell, "Run this container,"
+and it would automatically run on the cloud. Let's get a 10000 feet overview of this phenomenon here. Before Docker, virtual machines were very popular.
+
+You have the hardware, you have a host operating system installed on top of the hardware, and we had something called the Hypervisor to manage your virtual machines.
+So each of these was a virtual machine, so you have Virtual Machine 1, v]Virtual Machine 2, Virtual Machine 3. And each virtual machine had a guest OS,
+and on top of it, you have the software that you'd want to install to run your application, and on top of it is your application.
+
+One of the major problems with these virtual machine architecture, was typically these are heavy weight. We had two operating systems, host operating system and
+guest operating system and that makes the whole thing a little heavy. And that's where Docker comes in. If you have some infrastructure and if you have some host
+operating system installed on top of it, all that you need to do is install the Docker engine for that specific operating system and Docker would take care of managing
+these containers. The Docker image contains all that is needed to run a container. All the libraries, all the software, are directly part of these containers.
+
+Because there is just one OS, the HostOS, Docker is relatively lightweight, and therefore it is very efficient. And that's why you would see that all the cloud
+providers provide a number of services around Docker. Today, as we speak, it's very easy to deploy something related to Docker onto any of the cloud providers.
+Azure provides a service called Azure Container Service. AWS, Amazon Web Services, provides a service called Elastic Container Service.
+So the thing which we are understanding right now is the fact that using Docker on local is very easy and using Docker on the cloud is also very easy.
+And that's the reason why Docker is becoming really, really popular during the last few years.
